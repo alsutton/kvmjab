@@ -1,0 +1,15 @@
+com.alsutton.jabber.JabberDataBlock
+com.alsutton.jabber.JabberDataBlockDispatcher
+com.alsutton.jabber.JabberListener
+com.alsutton.jabber.JabberStream
+com.alsutton.jabber.ConnectorInterface
+com.alsutton.jabber.meConnector
+com.alsutton.jabber.datablocks.Iq
+com.alsutton.jabber.datablocks.Login
+com.alsutton.jabber.datablocks.Message
+com.alsutton.jabber.datablocks.Presence
+com.alsutton.xmlparser.ReadEndChecker
+com.alsutton.xmlparser.XMLEventListener
+com.alsutton.xmlparser.XMLParser$InPlaintextReadEndChecker
+com.alsutton.xmlparser.XMLParser$InTagReadEndChecker
+com.alsutton.xmlparser.XMLParser
