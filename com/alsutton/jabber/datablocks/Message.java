@@ -48,7 +48,8 @@ public class Message extends JabberDataBlock
   {
     super();
 
-    setAttribute( "to", to );
+    if( to != null )
+      setAttribute( "to", to );
     if( message != null )
       setBodyText( message );
   }
@@ -62,6 +63,15 @@ public class Message extends JabberDataBlock
   public Message( String to )
   {
     this( to, null );
+  }
+
+  /**
+   * Default Constructor. Alls for construction of an empty message template.
+   */
+
+  public Message()
+  {
+    this( null );
   }
 
   /**
@@ -88,6 +98,35 @@ public class Message extends JabberDataBlock
     JabberDataBlock body = new JabberDataBlock( "body", null, null );
     body.addText( text );
     addChild( body );
+  }
+
+  /**
+   * Method to set the body text written in HTML. Creates a block with html as
+   * it's tag name in the xhtml name space and inserts the html into it.
+   *
+   * @param html The html to go in the message body
+   */
+
+  public void setHTMLBodyText( String html )
+  {
+    JabberDataBlock body = new JabberDataBlock( "html", null, null );
+    body.setAttribute( "xmlns", "http://www.w3.org/1999/xhtml" );
+    body.addText( html );
+    addChild( body );
+  }
+
+  /**
+   * Method to set the message thread. Creates a block with thread as it's tag
+   * name and inserts the thread name into it.
+   *
+   * @param threadName The string to go in the thread block
+   */
+
+  public void setThread( String text )
+  {
+    JabberDataBlock thread = new JabberDataBlock( "thread", null, null );
+    thread.addText( text );
+    addChild( thread );
   }
 
   /**
@@ -171,11 +210,15 @@ public class Message extends JabberDataBlock
     reply.setAttribute( "type", messageType );
 
     String thread = getTextForChildBlock( "thread" );
-    if( thread.length() > 0 )
+    if( thread != null && thread.length() > 0 )
     {
-        JabberDataBlock threadBlock = new JabberDataBlock( "thread", null, null );
-        threadBlock.addText( thread );
-        reply.addChild( threadBlock );
+      setThread( thread );
+    }
+
+    String id = getAttribute( "id" );
+    if( id != null && id.length() > 0 )
+    {
+      setAttribute( "id", id );
     }
 
     return reply;

@@ -64,8 +64,29 @@ public class JabberStream implements XMLEventListener, Runnable
    * the connection
    */
 
-  public JabberStream( ConnectorInterface connectorInterface ) throws IOException
+  public JabberStream( ConnectorInterface connectorInterface )
+    throws IOException
   {
+    this( connectorInterface, null );
+  }
+
+  /**
+   * Constructor. Connects to the server and sends the jabber welcome message.
+   *
+   * @param connectorInterface The connector which establishes the socket for
+   * the connection
+   */
+
+  public JabberStream( ConnectorInterface connectorInterface,
+    JabberListener theListener )
+    throws IOException
+  {
+    dispatcher = new JabberDataBlockDispatcher();
+    if( theListener != null )
+    {
+      setJabberListener( theListener );
+    }
+
     outStream = connectorInterface.openOutputStream();
     inpStream = connectorInterface.openInputStream();
 
@@ -75,8 +96,6 @@ public class JabberStream implements XMLEventListener, Runnable
     streamInitiator.append( "\" xmlns=\"jabber:client\" xmlns:stream=\"http://etherx.jabber.org/streams\">" );
     outStream.write( streamInitiator.toString().getBytes() );
     outStream.flush();
-
-    dispatcher = new JabberDataBlockDispatcher();
 
     Thread newThread = new Thread( this );
     newThread.start();

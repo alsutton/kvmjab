@@ -58,6 +58,15 @@ public class Presence extends JabberDataBlock
   }
 
   /**
+   * Method to set the presence type
+   */
+
+  public void setType( String type )
+  {
+    setAttribute("type", type);
+  }
+
+  /**
    * Method to get the name of the tag
    */
 

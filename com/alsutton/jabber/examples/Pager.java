@@ -131,6 +131,12 @@ public class Pager implements JabberListener
   public void send( String to, String message )
     throws IOException
   {
+    if( to == null || to.length() == 0 )
+      throw new RuntimeException( "No recipient has been specified" );
+
+    if( message == null || message.length() == 0 )
+      throw new RuntimeException( "No message text has been entered" );
+
     // This next section could be written by waiting for a monitor on
     // an object, it is written this way for clarity.
 
@@ -166,15 +172,6 @@ public class Pager implements JabberListener
 
     try
     {
-      if( jabberStream == null )
-        connectToJabberServer();
-
-      if( to == null || to.length() == 0 )
-        throw new RuntimeException( "No recipient has been specified" );
-
-      if( message == null || message.length() == 0 )
-        throw new RuntimeException( "No message text has been entered" );
-
       Message outgoingMessage = new Message( to, message );
       jabberStream.send( outgoingMessage );
     }
