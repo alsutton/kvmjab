@@ -27,8 +27,7 @@
 package com.alsutton.jabber.datablocks;
 
 /**
- * Title:        Presence.java
- * Description:  Class representing the presence message block
+ * Class representing the presence message block.
  */
 
 import com.alsutton.jabber.*;
@@ -50,7 +49,7 @@ public class Presence extends JabberDataBlock
   }
 
   /**
-   * Null constructor for outgoing presence messages
+   * Default constructor for outgoing presence messages.
    */
 
   public Presence()

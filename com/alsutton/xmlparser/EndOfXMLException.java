@@ -24,37 +24,12 @@
   THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.alsutton.jabber.datablocks;
+package com.alsutton.xmlparser;
 
 /**
- * Class representing the iq message block
+ * Exception thrown when the end of a XML stream is reached.
  */
 
-import com.alsutton.jabber.*;
-
-import java.util.*;
-
-public class Iq extends JabberDataBlock
+public class EndOfXMLException extends Exception
 {
-  /**
-   * Constructor including an Attribute list
-   *
-   * @param _parent The parent of this datablock
-   * @param _attributes The list of element attributes
-   */
-
-  public Iq( JabberDataBlock _parent, Hashtable _attributes )
-  {
-    super( _parent, _attributes );
-  }
-
-  /**
-   * Method to return the tag name
-   *
-   * @return Always the string "iq".
-   */
-  public String getTagName()
-  {
-    return "iq";
-  }
 }

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2000, Al Sutton (al@alsutton.com)
+  Copyright (c) 2000,2001 Al Sutton (al@alsutton.com)
   All rights reserved.
   Redistribution and use in source and binary forms, with or without modification, are permitted
   provided that the following conditions are met:
@@ -27,10 +27,9 @@
 package com.alsutton.jabber.datablocks;
 
 /**
- * Title:        Login.java
- * Description:  The class representing the login message
- *
- * Note: This has no incomming constructor as login messages are never
+ * The class representing the login message.
+ * <p>
+ * This has no incomming constructor as login messages are never
  * received from the server.
  */
 
@@ -38,12 +37,6 @@ import com.alsutton.jabber.*;
 
 public class Login extends JabberDataBlock
 {
-  /**
-   * The data representing the block
-   */
-
-  private String completeBlock;
-
   /**
    * Constructor. Builds the string ready for sending to the server.
    *
@@ -56,75 +49,43 @@ public class Login extends JabberDataBlock
   {
     super( );
 
-    StringBuffer blockBuffer = new StringBuffer( "<iq id=\"1001\" type=\"set\"><query xmlns=\"jabber:iq:auth\">");
+    setAttribute( "id", "1001" );
+    setAttribute( "type", "set" );
+
+    JabberDataBlock queryBlock = new JabberDataBlock( "query", null, null );
+    queryBlock.setAttribute( "xmlns", "jabber:iq:auth" );
+
+    addChild(queryBlock);
 
     if( username != null )
     {
-      blockBuffer.append( "<username>" );
-      blockBuffer.append( username );
-      blockBuffer.append( "</username>" );
+      JabberDataBlock usernameBlock = new JabberDataBlock( "username", null, null );
+      usernameBlock.addText( username );
+      queryBlock.addChild( usernameBlock );
     }
 
     if( password != null )
     {
-      blockBuffer.append( "<password>" );
-      blockBuffer.append( password );
-      blockBuffer.append( "</password>" );
+      JabberDataBlock passwordBlock = new JabberDataBlock( "password", null, null );
+      passwordBlock.addText( password );
+      queryBlock.addChild( passwordBlock );
     }
 
     if( resource != null )
     {
-      blockBuffer.append( "<resource>" );
-      blockBuffer.append( resource );
-      blockBuffer.append( "</resource>" );
-    }
-
-    blockBuffer.append( "</query></iq>" );
-    completeBlock = blockBuffer.toString();
+      JabberDataBlock resourceBlock = new JabberDataBlock( "resource", null, null );
+      resourceBlock.addText( resource );
+      queryBlock.addChild( resourceBlock );
+   }
   }
 
   /**
-   * Return this block as a byte sequence
+   * Method to return the tag name
    *
-   * @return The byte array representing this block
+   * @return Always the string "iq".
    */
-
-  public byte[] getBytes()
+  public String getTagName()
   {
-    return completeBlock.getBytes();
+    return "iq";
   }
-
-  /**
-   * Return this block as a byte sequence
-   *
-   * @return The string representing this block
-   */
-
-  public String toString()
-  {
-    return completeBlock;
-  }
-
-  /**
-   * Method to return the start of tag string as a string
-   *
-   * @return Always returns "<login>" as this block needs no parameters
-   */
-
-  public String getTagStart()
-  {
-    return "<login>";
-  }
-
-  /**
-   * Method to return the end of tag string as a string
-   *
-   * @return Always returns "</login>" as this block needs no parameters
-   */
-
-  public String getTagEnd()
-  {
-    return "</login>";
-  }
-
 }

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2000, Al Sutton (al@alsutton.com)
+  Copyright (c) 2000,2001 Al Sutton (al@alsutton.com)
   All rights reserved.
   Redistribution and use in source and binary forms, with or without modification, are permitted
   provided that the following conditions are met:
@@ -27,8 +27,7 @@
 package com.alsutton.xmlparser;
 
 /**
- * Title:        Parser.java
- * Description:  XML Parser, main code
+ * The main XML Parser class.
  */
 
 import java.io.*;
@@ -44,15 +43,21 @@ public class XMLParser
   private Reader inputReader;
 
   /**
-   * The handler for XML Events
+   * The handler for XML Events.
    */
 
   private XMLEventListener eventHandler;
 
   /**
-   * Constructor, Used to override default dispatcher
+   * The root tag for the document.
+   */
+
+  private String rootTag = null;
+
+  /**
+   * Constructor, Used to override default dispatcher.
    *
-   * @param _eventHandler The event handle to dispatch events through
+   * @param _eventHandler The event handle to dispatch events through.
    */
 
   public XMLParser( XMLEventListener _eventHandler )
@@ -61,19 +66,32 @@ public class XMLParser
   }
 
   /**
-   * Method to read until an end condition
+   * Method to read until an end condition.
    *
-   * @param checker The class used to check if the end condition has occurred
-   * @return A string representation of the data read
+   * @param checker The class used to check if the end condition has occurred.
+   * @return A string representation of the data read.
    */
   private String readUntilEnd( ReadEndChecker checker ) throws IOException
   {
     StringBuffer data = new StringBuffer();
+    boolean inQuote = false;
 
     int nextChar = inputReader.read();
-    while( nextChar != -1 && checker.shouldStop( nextChar ) == false )
+    if( nextChar == '\"' )
+      inQuote = true;
+    while( nextChar != -1 && (inQuote == true || checker.shouldStop( nextChar ) == false) )
     {
-      data.append( (char) nextChar );
+      if( nextChar == '\"')
+      {
+        if( inQuote )
+          inQuote=false;
+        else
+          inQuote=true;
+      }
+      else
+      {
+        data.append( (char) nextChar );
+      }
       nextChar = inputReader.read();
     }
     if( nextChar != '<' && nextChar != '>')
@@ -84,10 +102,11 @@ public class XMLParser
   }
 
   /**
-   * Method to handle the reading and dispatch of tag data
+   * Method to handle the reading and dispatch of tag data.
    */
 
-  private void handleTag() throws IOException
+  private void handleTag()
+    throws IOException, EndOfXMLException
   {
     boolean startTag = true,
             emptyTag = false,
@@ -98,7 +117,6 @@ public class XMLParser
     do
     {
       String data = readUntilEnd ( inTagReadEndChecker );
-
       int substringStart = 0,
           substringEnd = data.length();
 
@@ -131,6 +149,13 @@ public class XMLParser
 
       int stringLength = data.length();
       int equalitySign = data.indexOf( '=' );
+      if( equalitySign == -1 )
+      {
+        if( hasMoreData )
+          continue;
+        else
+          break;
+      }
 
       String attributeName = data.substring(0, equalitySign);
       int valueStart = equalitySign+1;
@@ -156,16 +181,26 @@ public class XMLParser
     if( tagName.startsWith( "?") )
       return;
 
+    tagName = tagName.toLowerCase();
     if( startTag )
+    {
+      if( rootTag == null )
+        rootTag = tagName;
       eventHandler.tagStarted( tagName, attributes);
+    }
 
     if( emptyTag || !startTag )
+    {
       eventHandler.tagEnded( tagName );
+      if( rootTag != null && tagName.equals( rootTag ) )
+        throw new EndOfXMLException();
+    }
   }
 
   /**
-   * Method to handle the reading in and dispatching of events for plain text
+   * Method to handle the reading in and dispatching of events for plain text.
    */
+
   private void handlePlainText() throws IOException
   {
     String data = readUntilEnd ( inPlaintextReadEndChecker );
@@ -173,27 +208,56 @@ public class XMLParser
   }
 
   /**
-   * The main parsing loop
+   * The main parsing loop.
+   *
+   * @param _inputReader The reader for the XML stream.
    */
-  public void  parse ( Reader _inputReader ) throws IOException
+
+  public void  parse ( Reader _inputReader )
+    throws IOException
   {
     inputReader = _inputReader;
-    while( true )
+    try
     {
-      handlePlainText();
-      handleTag();
+      while( true )
+      {
+        handlePlainText();
+        handleTag();
+      }
+    }
+    catch( EndOfXMLException x )
+    {
+      // The EndOfXMLException is purely used to drop out of the
+      // continuous loop.
     }
   }
 
-  /*
-    Classes for handling the control of the reading stream
-  */
+
+
+/*
+
+------------------------------------------------------
+
+Classes for handling the control of the reading stream
+
+------------------------------------------------------
+
+*/
 
   /**
    * Class to indicate the end of reading a plain text section
    */
+
   class InPlaintextReadEndChecker implements ReadEndChecker
   {
+    /**
+     * The method to issue a stop message when a start tag symbol (&gt;)
+     * is encountered .
+     *
+     * @param c The character to check
+     * @return true if it is the symbol, false otehrwise.
+     */
+
     public boolean shouldStop( int c )
     {
       return (c == '<');
@@ -201,7 +265,7 @@ public class XMLParser
   }
 
   /**
-   * Shared instance of the plain text end checker
+   * Shared instance of the plain text end checker.
    */
 
   private final InPlaintextReadEndChecker inPlaintextReadEndChecker = new InPlaintextReadEndChecker();
@@ -209,8 +273,17 @@ public class XMLParser
   /**
    * Class to indicate the end of reading a tag section
    */
+
   class InTagReadEndChecker implements ReadEndChecker
   {
+    /**
+     * The method to issue a stop message when either a space of close
+     * tag symbol (&lt;) is encountered .
+     *
+     * @param c The character to check.
+     * @return true if c is either symbol, false otehrwise.
+     */
+
     public boolean shouldStop( int c )
     {
       return (c == '>' || c == ' ');
@@ -218,7 +291,7 @@ public class XMLParser
   }
 
   /**
-   * Shared instance of the tag end checker
+   * Shared instance of the tag end checker.
    */
 
   private final InTagReadEndChecker inTagReadEndChecker = new InTagReadEndChecker();

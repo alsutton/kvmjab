@@ -16,7 +16,7 @@
 
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR
   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE
+  FITNESS FOR A ARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE
   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
   (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
   OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
@@ -27,8 +27,7 @@
 package com.alsutton.xmlparser;
 
 /**
- * Title:        States.java
- * Description:  Class holding the possible states of the XML parser
+ * Class holding the possible states of the XML parser.
  */
 
 public final class States
@@ -37,7 +36,9 @@ public final class States
 
   public static final int IN_PLAINTEXT = 0;
 
-  /** State when the parser is reading a tag **/
+  /**
+   * State when the parser is reading a tag
+   */
 
   public static final int IN_TAG = 1;
 }

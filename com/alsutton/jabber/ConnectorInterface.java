@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2000, Al Sutton (al@alsutton.com)
+  Copyright (c) 2000,2001 Al Sutton (al@alsutton.com)
   All rights reserved.
   Redistribution and use in source and binary forms, with or without modification, are permitted
   provided that the following conditions are met:
@@ -27,16 +27,14 @@
 package com.alsutton.jabber;
 
 /**
- * Title:        ConnectorInterface.java
- * Description:  The interface for all connectors which handle creating the input
- *  and output stream.
+ * The interface for all connectors which handle creating the input
+ * and output stream.
  */
 
 import java.io.*;
 
 public abstract class ConnectorInterface
 {
-
   /**
    * The name of the host being connected to
    */

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2000, Al Sutton (al@alsutton.com)
+  Copyright (c) 2000,2001 Al Sutton (al@alsutton.com)
   All rights reserved.
   Redistribution and use in source and binary forms, with or without modification, are permitted
   provided that the following conditions are met:
@@ -27,10 +27,9 @@
 package com.alsutton.jabber;
 
 /**
- * Title:        JabberDataBlockDispatcher.java
- * Description:  The dispatcher for blocks that have arrived. Adds new blocks to the
- *  dispatch queue, and then dispatches waiting blocks in their own thread to avoid
- *  holding up the stream reader.
+ * The dispatcher for blocks that have arrived. Adds new blocks to the
+ * dispatch queue, and then dispatches waiting blocks in their own thread to
+ * avoid holding up the stream reader.
  */
 
 import java.io.*;
@@ -57,7 +56,7 @@ public class JabberDataBlockDispatcher extends Thread
   private boolean dispatcherActive;
 
   /**
-   * Constructor to start the dispatcher in a thread
+   * Constructor to start the dispatcher in a thread.
    */
 
   public JabberDataBlockDispatcher()
@@ -69,7 +68,7 @@ public class JabberDataBlockDispatcher extends Thread
    * Set the listener that we are dispatching to. Allows for switching
    * of clients in mid stream.
    *
-   * @param _listener The listener to dispatch to
+   * @param _listener The listener to dispatch to.
    */
 
   public void setJabberListener( JabberListener _listener )
@@ -127,8 +126,9 @@ public class JabberDataBlockDispatcher extends Thread
   /**
    * Method to tell the listener the connection has been terminated
    *
-   * @param exception The exception that caused the termination. This may be null
-   *  for the situtations where the connection has terminated without an exception.
+   * @param exception The exception that caused the termination. This may be
+   * null for the situtations where the connection has terminated without an
+   * exception.
    */
 
   public void broadcastTerminatedConnection( Exception exception )
@@ -139,7 +139,7 @@ public class JabberDataBlockDispatcher extends Thread
   }
 
   /**
-   * Method to tell the listener the stream is ready for talking to
+   * Method to tell the listener the stream is ready for talking to.
    */
 
   public void broadcastBeginConversation( )
@@ -148,4 +148,3 @@ public class JabberDataBlockDispatcher extends Thread
       listener.beginConversation();
   }
 }
-

@@ -163,6 +163,10 @@ public class Message extends JabberDataBlock
 
     Message reply = new Message( to );
 
+    String from = (String) attributes.get( "to" );
+    if( from != null )
+      reply.setAttribute( "from", from );
+
     String messageType = getAttribute( "type" );
     reply.setAttribute( "type", messageType );
 
@@ -187,5 +191,4 @@ public class Message extends JabberDataBlock
   {
     return "message";
   }
-
 }

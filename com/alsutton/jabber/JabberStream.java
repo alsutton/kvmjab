@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2000, Al Sutton (al@alsutton.com)
+  Copyright (c) 2000,2001 Al Sutton (al@alsutton.com)
   All rights reserved.
   Redistribution and use in source and binary forms, with or without modification, are permitted
   provided that the following conditions are met:
@@ -27,8 +27,7 @@
 package com.alsutton.jabber;
 
 /**
- * Title:        JabberStream.java
- * Description:  The stream to a jabber server
+ * The stream to a jabber server.
  */
 
 import java.io.*;
@@ -41,28 +40,30 @@ import com.alsutton.xmlparser.*;
 public class JabberStream implements XMLEventListener, Runnable
 {
   /**
-   * The Output stream to the server
+   * The Output stream to the server.
    */
 
   private OutputStream outStream;
 
   /**
-   * The input stream from the server
+   * The input stream from the server.
    */
 
   private InputStream inpStream;
 
   /**
-   * The dispatcher thread
+   * The dispatcher thread.
    */
 
   private JabberDataBlockDispatcher dispatcher;
 
   /**
-   * Constructor
+   * Constructor. Connects to the server and sends the jabber welcome message.
    *
-   * @param connectorInterface The connector which establishes the socket for the connection
+   * @param connectorInterface The connector which establishes the socket for
+   * the connection
    */
+
   public JabberStream( ConnectorInterface connectorInterface ) throws IOException
   {
     outStream = connectorInterface.openOutputStream();
@@ -82,7 +83,8 @@ public class JabberStream implements XMLEventListener, Runnable
   }
 
   /**
-   * The threads run method. Handles the parsing of incomming data in its own thread.
+   * The threads run method. Handles the parsing of incomming data in its
+   * own thread.
    */
 
   public void run()
@@ -98,11 +100,11 @@ public class JabberStream implements XMLEventListener, Runnable
     {
       dispatcher.broadcastTerminatedConnection(e);
     }
-
   }
 
   /**
-   * Method to close the stream
+   * Method to close the connection to the server and tell the listener
+   * that the connection has been terminated.
    */
 
   public void close()
@@ -116,6 +118,8 @@ public class JabberStream implements XMLEventListener, Runnable
     }
     catch( IOException e )
     {
+      // Ignore an IO Exceptions because they mean that the stream is
+      // unavailable, which is irrelevant.
     }
     finally
     {
@@ -124,9 +128,9 @@ public class JabberStream implements XMLEventListener, Runnable
   }
 
   /**
-   * Method of sending data to the server
+   * Method of sending data to the server.
    *
-   * @param data The data to send
+   * @param data The data to send.
    */
 
   public void send( byte[] data ) throws IOException
@@ -136,9 +140,9 @@ public class JabberStream implements XMLEventListener, Runnable
   }
 
   /**
-   * Method of sending data to the server
+   * Method of sending data to the server.
    *
-   * @param The data to send to the server
+   * @param The data to send to the server.
    */
 
   public void send( String data ) throws IOException
@@ -147,9 +151,9 @@ public class JabberStream implements XMLEventListener, Runnable
   }
 
   /**
-   * Method of sending a Jabber datablock to the server
+   * Method of sending a Jabber datablock to the server.
    *
-   * @param block The data block to send to the server
+   * @param block The data block to send to the server.
    */
 
   public void send( JabberDataBlock block ) throws IOException
@@ -158,7 +162,7 @@ public class JabberStream implements XMLEventListener, Runnable
   }
 
   /**
-   * Set the listener to this stream
+   * Set the listener to this stream.
    */
 
   public void setJabberListener( JabberListener listener )
@@ -167,17 +171,19 @@ public class JabberStream implements XMLEventListener, Runnable
   }
 
   /**
-   * The current class being constructed
+   * The current class being constructed.
    */
 
   private JabberDataBlock currentBlock;
 
   /**
-   * Method called when an XML tag is started
+   * Method called when an XML tag is started in the stream comming from the
+   * server.
    *
-   * @param name Tag name
-   * @param attributes The tags attributes
+   * @param name Tag name.
+   * @param attributes The tags attributes.
    */
+
   public void tagStarted( String name, Hashtable attributes )
   {
     if ( name.equals( "stream:stream" ) )
@@ -191,10 +197,12 @@ public class JabberStream implements XMLEventListener, Runnable
   }
 
   /**
-   * Method called when some plain text is encountered
+   * Method called when some plain text is encountered in the XML stream
+   * comming from the server.
    *
    * @param text The plain text in question
    */
+
   public void plaintextEncountered( String text )
   {
     if( currentBlock != null )
@@ -204,10 +212,12 @@ public class JabberStream implements XMLEventListener, Runnable
   }
 
   /**
-   *  The method called when a tag is ended
+   * The method called when a tag is ended in the stream comming from the
+   * server.
    *
-   * @param name The name of the tag that has just ended
+   * @param name The name of the tag that has just ended.
    */
+
   public void tagEnded( String name )
   {
     if( currentBlock == null )
@@ -217,7 +227,7 @@ public class JabberStream implements XMLEventListener, Runnable
     if( parent == null )
       dispatcher.broadcastJabberDataBlock( currentBlock );
     else
-      parent.addChild( currentBlock);
+      parent.addChild( currentBlock );
     currentBlock = parent;
   }
 }

@@ -158,6 +158,7 @@ public class JabberDataBlock
    *
    * @return The data to send as a byte array
    */
+
   public byte[] getBytes()
   {
     String data = toString();
@@ -203,6 +204,17 @@ public class JabberDataBlock
       attributes = new Hashtable();
 
     attributes.put( attributeName, value );
+  }
+
+  /**
+   * Returns a vector holding all of the children of this block
+   *
+   * @param Vector holding all the children
+   */
+
+  public Vector getChildBlocks()
+  {
+    return (Vector) childBlocks;
   }
 
   /**
@@ -282,6 +294,7 @@ public class JabberDataBlock
    *
    * @return The end tag string
    */
+
   public String getTagEnd()
   {
     StringBuffer end = new StringBuffer( "</" );
@@ -296,6 +309,7 @@ public class JabberDataBlock
    *
    * @return The tag name
    */
+
   public String getTagName()
   {
     return tagName;

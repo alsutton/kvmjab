@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2000, Al Sutton (al@alsutton.com)
+  Copyright (c) 2000,2001 Al Sutton (al@alsutton.com)
   All rights reserved.
   Redistribution and use in source and binary forms, with or without modification, are permitted
   provided that the following conditions are met:
@@ -27,8 +27,7 @@
 package com.alsutton.jabber;
 
 /**
- * Title:        JabberListener
- * Description:  The interface classes that listen for jabber messages should implement
+ * The interface classes that listen for jabber messages should implement
  */
 
 public interface JabberListener
@@ -55,5 +54,4 @@ public interface JabberListener
    */
 
   public void connectionTerminated( Exception e );
-
 }

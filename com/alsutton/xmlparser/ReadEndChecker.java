@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2000, Al Sutton (al@alsutton.com)
+  Copyright (c) 2000,2001 Al Sutton (al@alsutton.com)
   All rights reserved.
   Redistribution and use in source and binary forms, with or without modification, are permitted
   provided that the following conditions are met:
@@ -27,8 +27,8 @@
 package com.alsutton.xmlparser;
 
 /**
- * Title:        ReadEndChecker.java
- * Description:  Interface for classes wishing to be able to stop a read
+ * Interface for classes wishing to be able to stop the reading of the
+ * incomming data stream.
  */
 
 public interface ReadEndChecker
