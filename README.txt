@@ -71,3 +71,13 @@ Once this has been done the class is free to send data to the server using the f
 method defined in the JabberStream class;
 
   public void send( JabberDataBlock block ) throws IOException
+
+
+
+
+Do you think this code is useful?
+---------------------------------
+
+If so please make a donation to my PayPal account called "al@alsutton.com".
+
+More info about PayPal can be found at http://www.paypal.com/
